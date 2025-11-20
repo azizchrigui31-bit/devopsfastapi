@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf/conf.d:/etc/nginx/conf.d 
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - users-service
+      - product-service
+      - order-service
+    networks:
+      - fastapi-network
+
+  
+  users-service:
+    build: ./users-service
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./users-service:/app
+    networks:
+      - fastapi-network
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  
+  product-service:
+    build: ./product-service
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./product-service:/app
+    networks:
+      - fastapi-network
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  
+  order-service:
+    build: ./order-service
+    ports:
+      - "8003:8000"
+    volumes: 
+      - ./order-service:/app
+    networks:
+      - fastapi-network
+    environment:
+      - PYTHONUNBUFFERED=1
+
+networks:
+  fastapi-network:
+    driver: bridge
