@@ -8,10 +8,4 @@ microservices devOps project with FastAPI, Docker swarm, Github actions CI/CD, a
 - **order-service**: Order processing 
 - **nginx**: Load balancer
 
-'''bash
 
-docker stack deploy -c docker-compose.swarm.yml devopsapp
-
-docker service ls
-
-curl http://localhost/users/
