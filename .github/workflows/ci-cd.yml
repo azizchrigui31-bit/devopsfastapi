@@ -34,7 +34,7 @@ jobs:
       - name: build Docker image
         run: |
           cd users-service
-          docker build -t users-service:latest
+          docker build -t users-service:latest .
 
   deploy-notification:
     needs: test
