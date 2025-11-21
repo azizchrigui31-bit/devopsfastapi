@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branche: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout code
+    uses: actions/checkout@v4
+
+    -name: set up Python
+    uses: actions/checkout@v4
+    with:
+      python-version: '3.9'
+
+
+    -name: set up Python
+    uses: actions/checkout@v4
+
+    -name: install dependencies
+     run: |
+       cd users-service
+       python -m pip install --upgrade pip
+       pip install -r requirements.txt
+
+    -name: run tests
+     run: |
+       cd users-service
+       pytest tests/ -v
+
+    -name: build Docker image
+     run:
+       cd users-service
+       docker build -t users-service:latest
+
+  deploy-notification:
+    needs: test
+    run-on: ububntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    -name: deployment ready
+    run: |
+      echo "test passed ready for deployment to docker swarm"
+      echo "to deploy manually: docker stack deploy -c docker-compose.swarm.yml devopsapp"
+ 
